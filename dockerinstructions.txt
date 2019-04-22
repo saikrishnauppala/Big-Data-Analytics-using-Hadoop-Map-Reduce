@@ -1,0 +1,38 @@
+
+#RUNNING CLOUDERA DOCKER BY SPECIFYING OUR LOCAL VOLUME
+
+docker run --hostname=quickstart.cloudera --privileged=true -t -i -v /home/sai/Desktop/DICProject2:/src --publish-all=true -p 8888 cloudera/quickstart /usr/bin/docker-quickstart
+
+
+#CREATING DIRS IN HDFS
+
+hadoop fs -mkdir /user/sai
+hadoop fs -mkdir /user/sai/MR
+hadoop fs -mkdir /user/sai/MR/input
+
+#PUTTING TEXT FILES FROM LOCAL TO HDFS
+
+hadoop fs -put src/data/*.txt /user/sai/MR/input
+
+#FOR CHECKIG THE FILES ON HDFS
+hadoop fs -ls /user/sai/MR/input/
+
+#Dependencies for mapper stemming
+yum install epel-release
+yum install -y python-pip
+pip install stemming
+
+#RUN JAR FOR EXECUTING MAPPER AND REDUCER
+
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming-2.6.0-cdh5.7.0.jar -file /src/mapper.py -mapper /src/mapper.py -file /src/reducer.py -reducer /src/reducer.py -input /user/sai/MR/input/* -output /user/sai/MR/output
+
+#SEE OUTPUT
+hadoop fs -cat /user/sai/MR/output/part*
+
+hadoop fs -get /user/sai/MR/output /src
+
+
+
+
+
+

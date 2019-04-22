@@ -1,0 +1,8 @@
+#Python Stemming library is the only dependency for all Mappers and Reducers
+#For installing stemming dependency Follow these Commands:
+
+1) yum install epel-release
+
+2) yum install python-pip
+
+3) pip install stemming
